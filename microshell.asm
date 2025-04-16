@@ -72,10 +72,12 @@ _start:
     mov     rdx, 17
     syscall
 
-    ; execve("/bin/sh", NULL, NULL)
+    ; execve("/usr/bin/bash", NULL, NULL)
     xor     rax, rax
-    mov     rbx, 0x68732f6e69622f2f
+    mov     rbx, 0x00687361622f6e69      ; "in/bash\0"
+    mov     rcx, 0x2f2f7273752f          ; "/usr//"
     push    rbx
+    push    rcx
     mov     rdi, rsp
     xor     rsi, rsi
     xor     rdx, rdx
