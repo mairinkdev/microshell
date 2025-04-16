@@ -1,0 +1,55 @@
+Diagrama de Fluxo do Microshell
+===========================
+
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+| Obter Parâmetros |---->| Criar Socket     |---->| Conectar ao      |
+| IP/Porta         |     | (syscall 41)     |     | Servidor         |
+|                  |     |                  |     | (syscall 42)     |
++------------------+     +------------------+     +------------------+
+        |                                                |
+        |                                                |
+        v                                                v
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+| Verificar        |     | Redirecionar     |<----| Verificar        |
+| Variáveis de     |     | stdin/stdout/    |     | Argumentos CLI   |
+| Ambiente         |     | stderr           |     |                  |
++------------------+     +------------------+     +------------------+
+                                 |
+                                 |
+                                 v
+                         +------------------+
+                         |                  |
+                         | Executar Shell   |
+                         | /bin/sh          |
+                         | (syscall 59)     |
+                         +------------------+
+
+Fluxo de Dados para Configuração:
+=================================
+
+1. Verificar argumentos da linha de comando (mais prioritário)
+   - argv[1] = IP
+   - argv[2] = Porta
+
+2. Verificar variáveis de ambiente (se argumentos não existirem)
+   - REMOTE_IP
+   - REMOTE_PORT
+
+3. Usar valores padrão (quando 1 e 2 não estiverem disponíveis)
+   - IP = 127.0.0.1
+   - Porta = 4444
+
+Implementação em Assembly:
+=========================
+
+- section .data: Armazena valores padrão e strings
+- section .bss: Espaço para variáveis durante execução
+- section .text: Código executável
+
+Funções principais:
+- atoi: Converte string numérica para inteiro
+- parse_ip: Processa string IP no formato a.b.c.d
+- getenv: Busca variáveis de ambiente
+- _start: Ponto de entrada e lógica principal 
