@@ -78,6 +78,7 @@ _start:
     mov     rcx, 0x2f2f7273752f          ; "/usr//"
     push    rbx
     push    rcx
+    and     rsp, -16                    ; alinhamento da stack
     mov     rdi, rsp
     xor     rsi, rsi
     xor     rdx, rdx
