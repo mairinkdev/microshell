@@ -50,17 +50,12 @@ _start:
     test    rax, rax
     js      fail
 
+    mov     r12, rdi           ; salva sockfd para o loop
+
     ; dup2 loop com debug a cada syscall
     xor     rsi, rsi
 .loop:
-    ; debug: dup2()
-    mov     rax, 1
-    mov     rdi, 1
-    mov     rsi, msg_dup2
-    mov     rdx, 15
-    syscall
-
-    ; syscall: dup2(rdi, rsi)
+    mov     rdi, r12           ; recupera sockfd para dup2
     mov     rax, 33
     syscall
     test    rax, rax
