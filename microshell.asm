@@ -73,16 +73,15 @@ _start:
     syscall
 
     ; execve("/usr/bin/bash", NULL, NULL)
-    xor     rax, rax
+    and     rsp, -16                     ; alinhamento da stack
     mov     rbx, 0x00687361622f6e69      ; "in/bash\0"
     mov     rcx, 0x2f2f7273752f          ; "/usr//"
-    push    rbx
     push    rcx
-    and     rsp, -16                    ; alinhamento da stack
-    mov     rdi, rsp
-    xor     rsi, rsi
-    xor     rdx, rdx
-    mov     al, 59
+    push    rbx
+    mov     rdi, rsp                     ; pathname
+    xor     rsi, rsi                     ; argv = NULL
+    xor     rdx, rdx                     ; envp = NULL
+    mov     al, 59                       ; syscall: execve
     syscall
 
 fail:
